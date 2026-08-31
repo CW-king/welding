@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0f172a">
+<title>용접 문제은행</title>
+<style>
+:root{
+  --bg:#f5f6f8; --card:#ffffff; --ink:#111827; --ink2:#3d4653; --muted:#6b7280; --line:#e5e7eb;
+  --shadow:0 1px 2px rgba(16,24,40,.05),0 6px 18px rgba(16,24,40,.06); --r:16px;
+}
+@media (prefers-color-scheme:dark){
+  :root{--bg:#0b0e16;--card:#141926;--ink:#e9edf6;--ink2:#c7cfe0;--muted:#94a0b8;--line:#242b3c;--shadow:none;}
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Noto Sans KR","Malgun Gothic",sans-serif;
+  font-size:16px;line-height:1.6;word-break:keep-all;-webkit-text-size-adjust:100%;
+  padding:0 14px calc(40px + env(safe-area-inset-bottom))}
+.wrap{max-width:720px;margin:0 auto}
+header{padding:40px 4px 22px}
+h1{font-size:26px;font-weight:800;letter-spacing:-.03em;margin:0 0 8px}
+header p{margin:0;color:var(--muted);font-size:14.5px}
+.grid{display:grid;gap:11px}
+a.app{display:flex;gap:14px;align-items:center;text-decoration:none;color:inherit;
+  background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  box-shadow:var(--shadow);padding:16px 17px}
+a.app:focus-visible{outline:3px solid var(--c);outline-offset:2px}
+.ic{flex:0 0 52px;height:52px;border-radius:14px;display:grid;place-items:center;
+  background:var(--s);color:var(--c);font-weight:800;font-size:13px;letter-spacing:-.02em;line-height:1.25;text-align:center}
+.tx{flex:1;min-width:0}
+.tt{display:block;font-weight:800;font-size:17px;letter-spacing:-.02em}
+.ds{display:block;font-size:13.5px;color:var(--muted);margin-top:3px}
+.ar{color:var(--muted);font-size:20px;flex:0 0 auto}
+.n1{--c:#1d4ed8;--s:#e6edfd} .n2{--c:#0e7490;--s:#e0f2f4}
+.n3{--c:#b45309;--s:#fdf0dd} .n4{--c:#4338ca;--s:#eceafd}
+@media (prefers-color-scheme:dark){
+  .n1{--c:#93b4fd;--s:#141d33} .n2{--c:#67e8f9;--s:#0d2429}
+  .n3{--c:#fbbf24;--s:#2a2011} .n4{--c:#a5b4fc;--s:#1c1f3c}
+}
+footer{margin-top:26px;padding:16px 6px;color:var(--muted);font-size:13px;border-top:1px solid var(--line)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>용접 문제은행</h1>
+    <p>공부할 것을 골라 주세요. 인터넷이 끊겨도 한 번 연 뒤에는 계속 볼 수 있습니다.</p>
+  </header>
+
+  <div class="grid">
+    <a class="app n1" href="NCS교재.html">
+      <span class="ic">NCS<br>교재</span>
+      <span class="tx"><span class="tt">NCS 용접 교재</span>
+        <span class="ds">1~20편 · 1,029문항 · 단원마다 이론 요약과 해설</span></span>
+      <span class="ar">›</span>
+    </a>
+    <a class="app n2" href="기출문제.html">
+      <span class="ic">기출<br>문제</span>
+      <span class="tx"><span class="tt">용접 기출문제</span>
+        <span class="ds">기능사·산업기사 69회차 · 4,132문항 · 도면 1,019장</span></span>
+      <span class="ar">›</span>
+    </a>
+    <a class="app n3" href="과정평가.html">
+      <span class="ic">과정<br>평가</span>
+      <span class="tx"><span class="tt">과정평가형 용접산업기사</span>
+        <span class="ds">소단원 65개 · 1,218문항 · 모의고사 8회</span></span>
+      <span class="ar">›</span>
+    </a>
+    <a class="app n4" href="용접일반.html">
+      <span class="ic">이론<br>서</span>
+      <span class="tx"><span class="tt">용접 일반 이론서</span>
+        <span class="ds">11장 46절 + 부록 · 그림 296장 · 용어 사전 314개</span></span>
+      <span class="ar">›</span>
+    </a>
+  </div>
+
+  <footer>모르는 개념이 나오면 <b>용접 일반 이론서</b>에서 찾아보세요. 본문 검색과 용어 사전이 있습니다.</footer>
+</div>
+</body>
+</html>
