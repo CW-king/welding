@@ -36,11 +36,25 @@ a.app:focus-visible{outline:3px solid var(--c);outline-offset:2px}
 .ar{color:var(--muted);font-size:20px;flex:0 0 auto}
 .n1{--c:#1d4ed8;--s:#e6edfd} .n2{--c:#0e7490;--s:#e0f2f4}
 .n3{--c:#b45309;--s:#fdf0dd} .n4{--c:#4338ca;--s:#eceafd}
+.n5{--c:#166534;--s:#dcfce7}
+.ht{font-size:12px;font-weight:800;color:var(--muted);letter-spacing:.06em;margin:26px 4px 0}
 @media (prefers-color-scheme:dark){
   .n1{--c:#93b4fd;--s:#141d33} .n2{--c:#67e8f9;--s:#0d2429}
-  .n3{--c:#fbbf24;--s:#2a2011} .n4{--c:#a5b4fc;--s:#1c1f3c}
+  .n3{--c:#fbbf24;--s:#2a2011} .n4{--c:#a5b4fc;--s:#1c1f3c} .n5{--c:#86efac;--s:#0f2418}
 }
 footer{margin-top:26px;padding:16px 6px;color:var(--muted);font-size:13px;border-top:1px solid var(--line)}
+a.guide{display:flex;align-items:center;gap:13px;text-decoration:none;color:inherit;
+  background:var(--gs);border:1px solid transparent;border-radius:var(--r);padding:15px 17px;margin-bottom:14px}
+a.guide .gi{flex:0 0 40px;height:40px;border-radius:12px;background:var(--gc);color:var(--gbg);
+  display:grid;place-items:center;font-size:19px}
+a.guide .gx{flex:1;min-width:0}
+a.guide .gx b{display:block;font-weight:800;font-size:16px;letter-spacing:-.02em;color:var(--gc)}
+a.guide .gx span{display:block;font-size:13.5px;color:var(--muted);margin-top:2px}
+a.guide .ar{color:var(--gc)}
+:root{--gc:#1d4ed8;--gs:#e6edfd;--gbg:#fff}
+@media (prefers-color-scheme:dark){:root{--gc:#93b4fd;--gs:#141d33;--gbg:#0b0e16}}
+a.guide.first{border-color:var(--gc)}
+.fnote{font-size:12.5px;color:var(--muted);font-weight:700;margin:0 4px 6px}
 </style>
 </head>
 <body>
@@ -49,6 +63,13 @@ footer{margin-top:26px;padding:16px 6px;color:var(--muted);font-size:13px;border
     <h1>용접 문제은행</h1>
     <p>공부할 것을 골라 주세요. 인터넷이 끊겨도 한 번 연 뒤에는 계속 볼 수 있습니다.</p>
   </header>
+
+  <a class="guide" id="guide" href="공부방법.html">
+    <span class="gi">📖</span>
+    <span class="gx"><b>이렇게 공부하세요</b>
+      <span>교재 네 권 쓰는 순서 · 하루 20분 루틴 · 진도 저장하는 법 (3분)</span></span>
+    <span class="ar">›</span>
+  </a>
 
   <div class="grid">
     <a class="app n1" href="NCS교재.html">
@@ -77,7 +98,28 @@ footer{margin-top:26px;padding:16px 6px;color:var(--muted);font-size:13px;border
     </a>
   </div>
 
-  <footer>모르는 개념이 나오면 <b>용접 일반 이론서</b>에서 찾아보세요. 본문 검색과 용어 사전이 있습니다.</footer>
+  <h2 class="ht">내 학습 기록</h2>
+  <div class="grid">
+    <a class="app n5" href="내학습.html">
+      <span class="ic">내<br>학습</span>
+      <span class="tx"><span class="tt">학습 달력 · 진도 백업</span>
+        <span class="ds">연속 학습일과 교재별 진도를 한눈에 · 다른 기기로 진도 옮기기</span></span>
+      <span class="ar">›</span>
+    </a>
+  </div>
+
+  <footer>공부하는 방법이 헷갈리면 맨 위 <b>[이렇게 공부하세요]</b> 를 다시 보세요.<br>
+  진도는 <b>이 기기의 브라우저</b>에 저장됩니다. 껐다 켜도 남지만 기기를 바꾸면 사라지니,
+  가끔 <b>내 학습 기록 → 백업 코드</b>를 저장해 두세요.<br>
+  모르는 개념이 나오면 <b>용접 일반 이론서</b>에서 찾아보세요. 본문 검색과 용어 사전이 있습니다.</footer>
 </div>
+<script>
+try{ if(!localStorage.getItem('wking_guide_seen')){
+  var g=document.getElementById('guide');
+  if(g){ g.classList.add('first');
+    var n=document.createElement('div'); n.className='fnote'; n.textContent='처음이라면 여기부터 ↓';
+    g.parentNode.insertBefore(n,g); } }
+}catch(e){}
+</script>
 </body>
 </html>

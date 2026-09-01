@@ -148,6 +148,10 @@ header{position:sticky;top:0;z-index:30;background:var(--card);border-bottom:1px
   padding:10px 16px;border-radius:99px;font-size:13px;z-index:60;opacity:0;transition:opacity .25s;pointer-events:none}
 .toast.on{opacity:.94}
 .yr{font-size:12px;font-weight:800;color:var(--muted);letter-spacing:.04em;margin:16px 4px 6px}
+
+.wkft{max-width:760px;margin:22px auto 0;padding:0 14px calc(24px + env(safe-area-inset-bottom));text-align:center}
+.wkft a{display:inline-block;margin:0 3px 6px;padding:10px 16px;border-radius:99px;border:1px solid var(--line);
+  text-decoration:none;color:var(--muted);font-size:13px;font-weight:700;background:var(--card)}
 </style>
 </head>
 <body>
@@ -182,6 +186,15 @@ var KEY='gichul.v1';
 var ST=sget(KEY,{done:{}});
 if(!ST.done) ST.done={};
 function save(){ sset(KEY,ST); }
+/* 학습 달력 공용 기록 (내학습.html 과 공유) */
+function logStudy(ok){ try{
+  var K='wking_study_v1', L={d:{}};
+  try{ var r=localStorage.getItem(K); if(r) L=JSON.parse(r)||{d:{}}; }catch(e){}
+  L.d=L.d||{};
+  var dt=new Date(), T=Math.floor((dt-dt.getTimezoneOffset()*6e4)/864e5);
+  var e=L.d[T]||[0,0]; e[0]++; if(ok) e[1]++; L.d[T]=e;
+  localStorage.setItem(K, JSON.stringify(L));
+}catch(e){} }
 
 var $app=document.getElementById('app'), $title=document.getElementById('title'),
     $sub=document.getElementById('subtitle'), $back=document.getElementById('back');
@@ -477,7 +490,7 @@ function runQuiz(pane, qs, opt){
         b.onclick=function(){
           if(res[i]!==null) return;
           var pick=+b.dataset.c, right=pick===q.a;
-          res[i]=right?1:0; ST.done[q.gid]=res[i]; save();
+          res[i]=right?1:0; ST.done[q.gid]=res[i]; save(); logStudy(right);
           lock(pick);
           rv.innerHTML=revealHTML(q,right); rv.classList.remove('hide');
           rv.classList.add(right?'ok':'no'); counts();
@@ -554,5 +567,6 @@ function startMock(kind,n){
 
 render();
 </script>
+<div class="wkft"><a href="공부방법.html">📖 공부하는 방법</a> <a href="내학습.html">📊 내 학습 기록 · 진도 백업</a></div>
 </body>
 </html>

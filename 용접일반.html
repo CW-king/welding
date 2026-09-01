@@ -133,6 +133,10 @@ mark{background:var(--brand-soft);color:inherit;border-radius:3px;padding:0 2px}
 .lb img.big{width:min(190vw,1900px);cursor:zoom-out}
 .lbx{position:fixed;top:10px;right:12px;z-index:61;background:rgba(255,255,255,.14);color:#fff;border:0;
      border-radius:10px;padding:9px 13px;font-size:15px;font-weight:700;cursor:pointer}
+
+.wkft{max-width:760px;margin:22px auto 0;padding:0 14px calc(24px + env(safe-area-inset-bottom));text-align:center}
+.wkft a{display:inline-block;margin:0 3px 6px;padding:10px 16px;border-radius:99px;border:1px solid var(--line);
+  text-decoration:none;color:var(--muted);font-size:13px;font-weight:700;background:var(--card)}
 </style>
 </head>
 <body>
@@ -362,5 +366,6 @@ function viewSearch(q){
 if(!window.__IL__) $app.innerHTML='<div class="empty">데이터를 불러오지 못했습니다.</div>';
 else render();
 </script>
+<div class="wkft"><a href="공부방법.html">📖 공부하는 방법</a> <a href="내학습.html">📊 내 학습 기록 · 진도 백업</a></div>
 </body>
 </html>

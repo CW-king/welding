@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0f172a">
+<title>내 학습 기록 · 진도 백업</title>
+<style>
+:root{--bg:#f5f6f8;--card:#fff;--ink:#111827;--muted:#6b7280;--line:#e5e7eb;
+  --c:#1d4ed8;--cs:#e6edfd;--ok:#15803d;--no:#b91c1c;
+  --shadow:0 1px 2px rgba(16,24,40,.05),0 6px 18px rgba(16,24,40,.06);--r:16px}
+@media (prefers-color-scheme:dark){:root{--bg:#0b0e16;--card:#141926;--ink:#e9edf6;--muted:#94a0b8;
+  --line:#242b3c;--c:#93b4fd;--cs:#141d33;--ok:#4ade80;--no:#fca5a5;--shadow:none}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-size:16px;line-height:1.6;word-break:keep-all;
+  font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Noto Sans KR","Malgun Gothic",sans-serif;
+  -webkit-text-size-adjust:100%;padding:0 14px calc(46px + env(safe-area-inset-bottom))}
+button,input,textarea{font:inherit;color:inherit}
+.wrap{max-width:720px;margin:0 auto}
+header{padding:30px 4px 14px}
+h1{font-size:24px;font-weight:800;letter-spacing:-.03em;margin:0 0 6px}
+header p{margin:0;color:var(--muted);font-size:14px}
+a.home{display:inline-block;margin-bottom:14px;color:var(--muted);text-decoration:none;font-size:14px;font-weight:600}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:16px 17px;margin-top:12px}
+h2{font-size:12px;font-weight:800;color:var(--muted);letter-spacing:.06em;margin:24px 4px 6px}
+.ttl{font-weight:800;font-size:15.5px;letter-spacing:-.01em}
+.muted{color:var(--muted)}.small{font-size:13px}.hide{display:none!important}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-top:12px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:13px 14px}
+.tile i{font-style:normal;font-size:16px;display:block;line-height:1}
+.tile b{display:block;font-size:22px;font-weight:800;letter-spacing:-.03em;margin-top:3px}
+.tile span{display:block;font-size:11.5px;color:var(--muted);font-weight:600}
+.calwrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.cal{display:flex;gap:3px;min-width:min-content}
+.cw{display:grid;grid-template-rows:repeat(7,1fr);gap:3px}
+.cd{width:13px;height:13px;border-radius:3px;background:var(--line);display:block}
+.cd.lf{background:transparent}
+.cd.l1{background:var(--c);opacity:.3}.cd.l2{background:var(--c);opacity:.55}
+.cd.l3{background:var(--c);opacity:.78}.cd.l4{background:var(--c);opacity:1}
+.cd.now{box-shadow:0 0 0 1.5px var(--muted)}
+.calm{display:flex;gap:3px;margin-top:4px;min-width:min-content}
+.cm{flex:0 0 13px;width:13px;font-size:9.5px;color:var(--muted);white-space:nowrap}
+.callg{display:flex;align-items:center;gap:4px;margin-top:10px;font-size:11px}
+.callg .cd{width:11px;height:11px}
+.row{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--line)}
+.row:last-child{border-bottom:0}
+.row .nm{flex:1;min-width:0;font-weight:700;font-size:14.5px}
+.row .nm small{display:block;font-weight:600;font-size:11.5px;color:var(--muted)}
+.row .vv{font-weight:800;font-size:14px;white-space:nowrap}
+.bar{display:block;height:5px;border-radius:99px;background:var(--line);margin-top:6px;overflow:hidden}
+.bar>i{display:block;height:100%;background:var(--c);border-radius:99px}
+.act{display:flex;gap:8px;flex-wrap:wrap}
+.btn{padding:11px 15px;border-radius:12px;border:1.5px solid var(--line);background:var(--card);
+  font-weight:700;font-size:14px;cursor:pointer}
+.btn.primary{background:var(--c);border-color:var(--c);color:#fff}
+a.btn{text-decoration:none;display:inline-block}
+a.gd{display:grid;grid-template-columns:auto 1fr auto;gap:4px 12px;align-items:center;text-decoration:none;
+  color:inherit;background:var(--cs);border-radius:var(--r);padding:15px 17px;margin-top:11px}
+a.gd span{grid-row:1/3;font-size:20px}
+a.gd b{font-size:16px;font-weight:800;letter-spacing:-.02em;color:var(--c)}
+a.gd small{grid-column:2;font-size:13.3px;color:var(--muted)}
+a.gd i{grid-row:1/3;font-style:normal;color:var(--c);font-size:20px}
+@media (prefers-color-scheme:dark){.btn.primary{color:#0b0e16}}
+.btn.danger{border-color:var(--no);color:var(--no)}
+.ta{width:100%;min-height:92px;padding:10px 12px;border-radius:12px;border:1.5px solid var(--line);
+  background:var(--bg);color:var(--ink);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:11.5px;line-height:1.45;resize:vertical;word-break:break-all}
+.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:var(--ink);color:var(--bg);
+  padding:10px 16px;border-radius:99px;font-size:13.5px;font-weight:600;opacity:0;pointer-events:none;
+  transition:opacity .25s;z-index:60}
+.toast.on{opacity:.95}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="home" href="index.html">‹ 문제은행 첫 화면</a>
+  <header>
+    <h1>내 학습 기록</h1>
+    <p>네 권의 교재에서 푼 기록을 한자리에 모아 보고, 다른 기기로 옮길 수 있습니다.</p>
+  </header>
+  <div id="app"></div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+var LOGKEY='wking_study_v1';
+var APPS=[
+  {k:'gwajeong_v1', n:'과정평가형 용접산업기사', f:'과정평가.html', tot:1218},
+  {k:'gichul.v1',   n:'용접 기출문제',           f:'기출문제.html', tot:4132},
+  {k:'ncsweld.v1',  n:'NCS 용접 교재',           f:'NCS교재.html',  tot:1029},
+  {k:'ilban_v2',    n:'용접 일반 이론서',        f:'용접일반.html', tot:0}
+];
+var APPKEYS=APPS.map(function(a){return a.k;});
+function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+function lsSet(k,v){ try{ localStorage.setItem(k,v); return true; }catch(e){ return false; } }
+function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){
+  return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+function toast(t){ var e=document.getElementById('toast'); e.textContent=t; e.classList.add('on');
+  clearTimeout(e._t); e._t=setTimeout(function(){e.classList.remove('on');},1800); }
+function today(){ var d=new Date(); return Math.floor((d-d.getTimezoneOffset()*6e4)/864e5); }
+function dayDate(n){ var d=new Date(n*864e5); return new Date(d.getUTCFullYear(),d.getUTCMonth(),d.getUTCDate()); }
+function dayKo(n){ var d=dayDate(n); return (d.getMonth()+1)+'월 '+d.getDate()+'일'; }
+
+var LOG={d:{}};
+try{ var _l=lsGet(LOGKEY); if(_l) LOG=JSON.parse(_l)||{d:{}}; }catch(e){}
+LOG.d=LOG.d||{};
+function streak(){ var T=today(), n=0, i=LOG.d[T]?T:T-1;
+  while(LOG.d[i]&&LOG.d[i][0]>0){ n++; i--; } return n; }
+function totalDays(){ var n=0; for(var k in LOG.d) if(LOG.d[k][0]>0) n++; return n; }
+
+/* 교재별 진도 요약 */
+function appStat(k){
+  var raw=lsGet(k); if(!raw) return {done:0, ok:0, extra:''};
+  var o; try{ o=JSON.parse(raw); }catch(e){ return {done:0,ok:0,extra:''}; }
+  var done=0, ok=0, kk;
+  if(o.q){ for(kk in o.q){ var a=o.q[kk]; if(a&&a[1]>0){ done++; if(a[0]===1) ok++; } } }
+  else if(o.done){ for(kk in o.done){ var v=o.done[kk]; if(v===undefined) continue; done++; if(v===1) ok++; } }
+  else if(o.u){ for(kk in o.u){ var d=(o.u[kk]||{}).done||{};
+      for(var m in d){ done++; if(d[m]===1) ok++; } } }
+  var extra='';
+  if(o.read){ var r=0; for(kk in o.read) if(o.read[kk]) r++; if(r) extra=r+'절 읽음'; }
+  return {done:done, ok:ok, extra:extra};
+}
+function calHTML(weeks){
+  weeks=weeks||14;
+  var T=today(), dow=dayDate(T).getDay(), end=T+(6-dow), start=end-weeks*7+1, mx=1;
+  for(var i=start;i<=T;i++){ var e=LOG.d[i]; if(e&&e[0]>mx) mx=e[0]; }
+  function lv(n){ if(!n) return 0; if(n<=Math.max(3,mx*0.2)) return 1;
+    if(n<=Math.max(8,mx*0.45)) return 2; if(n<=Math.max(15,mx*0.75)) return 3; return 4; }
+  var h='<div class="calwrap"><div class="cal">', mons='', lastM=-1;
+  for(var w=0;w<weeks;w++){
+    var col='';
+    for(var dd=0;dd<7;dd++){
+      var n=start+w*7+dd, e2=LOG.d[n], c=e2?e2[0]:0;
+      col+='<i class="cd l'+(n>T?'f':lv(c))+(n===T?' now':'')+'" title="'+dayKo(n)+(c?' · '+c+'문항':'')+'"></i>';
+    }
+    var mo=dayDate(start+w*7+6).getMonth();
+    mons+='<span class="cm">'+(mo!==lastM?(mo+1)+'월':'')+'</span>'; lastM=mo;
+    h+='<div class="cw">'+col+'</div>';
+  }
+  return h+'</div><div class="calm">'+mons+'</div></div>';
+}
+
+/* 백업 */
+function bkCollect(){ var o={v:2,t:Date.now(),app:'w-king',data:{},log:LOG.d};
+  APPKEYS.forEach(function(k){ var s=lsGet(k); if(s) o.data[k]=s; }); return o; }
+function b64enc(u8){ var s='',C=0x8000;
+  for(var i=0;i<u8.length;i+=C) s+=String.fromCharCode.apply(null,u8.subarray(i,i+C)); return btoa(s); }
+function b64dec(b){ var s=atob(b),u=new Uint8Array(s.length);
+  for(var i=0;i<s.length;i++) u[i]=s.charCodeAt(i); return u; }
+function bkMakeCode(cb){
+  var u8=new TextEncoder().encode(JSON.stringify(bkCollect()));
+  if(typeof CompressionStream==='function'){ try{
+      new Response(new Blob([u8]).stream().pipeThrough(new CompressionStream('deflate-raw'))).arrayBuffer()
+        .then(function(ab){ cb('WKZ1.'+b64enc(new Uint8Array(ab))); })
+        .catch(function(){ cb('WKP1.'+b64enc(u8)); });
+      return; }catch(e){} }
+  cb('WKP1.'+b64enc(u8));
+}
+function bkReadCode(code,cb){
+  code=String(code||'').replace(/\s+/g,'');
+  var m=code.match(/^(WKZ1|WKP1)\.(.+)$/);
+  if(!m) return cb(null,'코드 형식이 올바르지 않습니다. WKZ1. 또는 WKP1. 으로 시작해야 합니다.');
+  var u8; try{ u8=b64dec(m[2]); }catch(e){ return cb(null,'코드가 손상되었습니다. 처음부터 끝까지 모두 복사했는지 확인해 주세요.'); }
+  function done(by){ try{ cb(JSON.parse(new TextDecoder().decode(by))); }
+    catch(e){ cb(null,'코드를 읽지 못했습니다. 다시 복사해 주세요.'); } }
+  if(m[1]==='WKZ1'){
+    if(typeof DecompressionStream!=='function') return cb(null,'이 브라우저에서는 이 코드를 풀 수 없습니다.');
+    try{ new Response(new Blob([u8]).stream().pipeThrough(new DecompressionStream('deflate-raw'))).arrayBuffer()
+      .then(function(ab){ done(new Uint8Array(ab)); }).catch(function(){ cb(null,'코드가 손상되었습니다.'); });
+    }catch(e){ cb(null,'코드를 풀지 못했습니다.'); }
+  } else done(u8);
+}
+function bkApply(o,mode){
+  if(!o||!o.data) return false;
+  APPKEYS.forEach(function(k){
+    var inc=o.data[k]; if(!inc) return;
+    if(mode==='replace'||!lsGet(k)){ lsSet(k,inc); return; }
+    try{
+      var A=JSON.parse(lsGet(k))||{}, B=JSON.parse(inc)||{}, kk;
+      function norm(x){ return (typeof x==='number')?[x,1,x===1?1:0,x===1?1:0,0,x===2?1:0]:x; }
+      if(A.q||B.q||A.done||B.done){
+        var Aq=A.q||A.done||{}, Bq=B.q||B.done||{}, out={};
+        for(kk in Aq) out[kk]=norm(Aq[kk]);
+        for(kk in Bq){ var b=norm(Bq[kk]), a=out[kk];
+          out[kk]=(!a||(b[1]||0)>(a[1]||0)||((b[1]||0)===(a[1]||0)&&(b[4]||0)>(a[4]||0)))?b:a; }
+        if(A.q||B.q){ A.q=out; delete A.done; A.v=2; } else A.done=out;
+      }
+      if(A.u||B.u){ A.u=A.u||{}; var Bu=B.u||{};
+        for(kk in Bu){ if(!A.u[kk]){ A.u[kk]=Bu[kk]; continue; }
+          A.u[kk].done=A.u[kk].done||{}; var bd=Bu[kk].done||{};
+          for(var m2 in bd) if(A.u[kk].done[m2]===undefined) A.u[kk].done[m2]=bd[m2]; } }
+      A.read=A.read||{}; var Br=B.read||{}; for(kk in Br) A.read[kk]=Br[kk];
+      lsSet(k,JSON.stringify(A));
+    }catch(e){ lsSet(k,inc); }
+  });
+  if(o.log){ var L={}; try{ L=(JSON.parse(lsGet(LOGKEY))||{}).d||{}; }catch(e){}
+    if(mode==='replace') L=o.log;
+    else for(var d in o.log){ var a2=L[d]||[0,0], b2=o.log[d];
+      L[d]=[Math.max(a2[0],b2[0]),Math.max(a2[1],b2[1])]; }
+    lsSet(LOGKEY,JSON.stringify({d:L})); }
+  return true;
+}
+function bkFileName(){ var d=new Date(), p=function(x){return (x<10?'0':'')+x;};
+  return '용접학습진도_'+d.getFullYear()+p(d.getMonth()+1)+p(d.getDate())+'.wking.txt'; }
+function bkDownload(code){ try{
+    var b=new Blob([code],{type:'text/plain;charset=utf-8'}), u=URL.createObjectURL(b), a=document.createElement('a');
+    a.href=u; a.download=bkFileName(); document.body.appendChild(a); a.click();
+    setTimeout(function(){URL.revokeObjectURL(u);a.remove();},1500); return true;
+  }catch(e){ return false; } }
+
+/* 화면 */
+function render(){
+  var T=today(), st=streak(), tot=totalDays(), s7=0, n30=0, ok30=0;
+  for(var i=0;i<30;i++){ var e=LOG.d[T-i]; if(!e) continue; if(i<7) s7+=e[0]; n30+=e[0]; ok30+=e[1]; }
+  var h='<div class="tiles">'+
+    '<div class="tile"><i>🔥</i><b>'+st+'일</b><span>연속 학습</span></div>'+
+    '<div class="tile"><i>📅</i><b>'+tot+'일</b><span>총 학습일</span></div>'+
+    '<div class="tile"><i>📝</i><b>'+s7+'문항</b><span>최근 7일</span></div>'+
+    '<div class="tile"><i>🎯</i><b>'+(n30?Math.round(100*ok30/n30):0)+'%</b><span>최근 30일 정답률</span></div>'+
+    '</div>';
+  h+='<h2>학습 달력 · 최근 14주</h2><div class="card">'+calHTML(14)+
+     '<div class="callg"><span class="muted">적음</span><i class="cd"></i><i class="cd l1"></i>'+
+     '<i class="cd l2"></i><i class="cd l3"></i><i class="cd l4"></i><span class="muted">많음</span></div></div>';
+
+  h+='<h2>교재별 진도</h2><div class="card">';
+  APPS.forEach(function(a){
+    var s=appStat(a.k);
+    h+='<div class="row"><span class="nm">'+esc(a.n)+
+       '<small>'+(a.tot? '푼 문항 '+s.done+' / '+a.tot.toLocaleString()+(s.done?' · 정답률 '+Math.round(100*s.ok/s.done)+'%':'')
+                       : (s.extra||'아직 기록 없음'))+'</small>'+
+       (a.tot?'<span class="bar"><i style="width:'+Math.round(100*Math.min(1,s.done/a.tot))+'%"></i></span>':'')+
+       '</span><a class="btn" href="'+a.f+'">열기</a></div>';
+  });
+  h+='</div>';
+
+  h+='<h2>1. 백업 만들기</h2><div class="card">'+
+     '<p class="muted small" style="margin:0">진도는 <b>이 기기의 이 브라우저</b>에만 저장됩니다. 창을 껐다 켜도 남지만, '+
+     '다른 기기로 옮기거나 인터넷 사용기록을 지우면 사라집니다. 아래 코드를 가끔 저장해 두세요.</p>'+
+     '<div class="act" style="margin-top:12px"><button class="btn primary" id="mk">백업 코드 만들기</button></div>'+
+     '<div id="mkout" class="hide" style="margin-top:12px"><textarea class="ta" id="code" readonly></textarea>'+
+     '<div class="muted small" id="csz" style="margin-top:4px"></div>'+
+     '<div class="act" style="margin-top:8px"><button class="btn primary" id="cp">코드 복사</button>'+
+     '<button class="btn" id="dl">파일로 저장</button></div>'+
+     '<p class="muted small" style="margin:10px 0 0">카카오톡 <b>나에게 보내기</b>, 메모장, 메일 등 아무 곳에나 붙여 두세요.</p></div></div>';
+
+  h+='<h2>2. 백업 되살리기</h2><div class="card">'+
+     '<textarea class="ta" id="inp" placeholder="백업 코드를 여기에 붙여넣기 (WKZ1. 또는 WKP1. 로 시작)"></textarea>'+
+     '<div class="act" style="margin-top:8px"><button class="btn primary" id="rs">합치기</button>'+
+     '<button class="btn" id="rp">덮어쓰기</button>'+
+     '<label class="btn" style="cursor:pointer">파일 열기<input type="file" id="fi" accept=".txt,.json,text/plain" style="display:none"></label></div>'+
+     '<p class="muted small" style="margin:10px 0 0"><b>합치기(권장)</b>는 지금 기기의 기록과 백업을 모두 살립니다. '+
+     '<b>덮어쓰기</b>는 지금 기기의 기록을 지우고 백업 그대로 되돌립니다.</p></div>';
+
+  h+='<h2>공부하는 방법</h2>'+
+     '<a class="gd" href="공부방법.html"><span>📖</span><b>이렇게 공부하세요</b>'+
+     '<small>교재 네 권 쓰는 순서 · 하루 20분 루틴 · 진도 저장하는 법</small><i>›</i></a>';
+  h+='<h2>3. 기록 지우기</h2><div class="card">'+
+     '<p class="muted small" style="margin:0">이 기기의 학습 기록(진도·오답노트·달력)을 모두 지웁니다. 되돌릴 수 없습니다.</p>'+
+     '<div class="act" style="margin-top:12px"><button class="btn danger" id="wipe">전체 기록 지우기</button></div></div>';
+
+  document.getElementById('app').innerHTML=h;
+  wire();
+}
+function wire(){
+  var $=function(i){ return document.getElementById(i); };
+  $('mk').onclick=function(){
+    $('mk').disabled=true; $('mk').textContent='만드는 중…';
+    bkMakeCode(function(code){
+      $('mk').disabled=false; $('mk').textContent='백업 코드 다시 만들기';
+      $('mkout').classList.remove('hide'); $('code').value=code;
+      $('csz').textContent='코드 길이 '+code.length.toLocaleString()+'자 · '+dayKo(today())+
+        (code.length>4000?' · 코드가 기니 파일로 저장하는 편이 안전합니다':'');
+    });
+  };
+  $('cp').onclick=function(){
+    var t=$('code'); t.select(); t.setSelectionRange(0,999999);
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(t.value).then(function(){toast('코드를 복사했습니다');},
+        function(){ try{document.execCommand('copy');toast('코드를 복사했습니다');}catch(e){toast('길게 눌러 직접 복사해 주세요');} });
+      return; }
+    var ok=false; try{ ok=document.execCommand('copy'); }catch(e){}
+    toast(ok?'코드를 복사했습니다':'길게 눌러 직접 복사해 주세요');
+  };
+  $('dl').onclick=function(){ toast(bkDownload($('code').value)?'파일로 저장했습니다':'저장에 실패했습니다. 코드를 복사해 주세요'); };
+  function restore(mode){
+    var v=$('inp').value.trim();
+    if(!v) return toast('백업 코드를 붙여넣어 주세요');
+    if(mode==='replace'&&!confirm('지금 기기의 기록을 지우고 백업으로 되돌립니다. 계속할까요?')) return;
+    bkReadCode(v,function(o,err){
+      if(!o) return toast(err||'코드를 읽지 못했습니다');
+      if(!bkApply(o,mode)) return toast('되살리지 못했습니다');
+      toast('되살렸습니다'); setTimeout(function(){ location.reload(); },900);
+    });
+  }
+  $('rs').onclick=function(){ restore('merge'); };
+  $('rp').onclick=function(){ restore('replace'); };
+  $('fi').onchange=function(){ var f=this.files&&this.files[0]; if(!f) return;
+    var r=new FileReader();
+    r.onload=function(){ $('inp').value=String(r.result||'').trim(); toast('파일을 읽었습니다. 합치기를 눌러 주세요'); };
+    r.onerror=function(){ toast('파일을 읽지 못했습니다'); }; r.readAsText(f); };
+  $('wipe').onclick=function(){
+    if(!confirm('이 기기의 학습 기록을 모두 지웁니다. 되돌릴 수 없습니다. 계속할까요?')) return;
+    if(!confirm('정말 지울까요? 백업 코드를 먼저 저장해 두는 것을 권합니다.')) return;
+    APPKEYS.concat([LOGKEY]).forEach(function(k){ try{ localStorage.removeItem(k); }catch(e){} });
+    location.reload(); };
+}
+render();
+</script>
+</body>
+</html>
