@@ -223,5 +223,37 @@ document.getElementById('lb').addEventListener('click',function(){this.classList
 $back.onclick=function(){home();};
 home();
 </script>
+<!-- 오류 신고 버튼: 문제(.qstem)마다 아래에 '오류 신고' 링크를 붙여, 문항 정보가 채워진 구글 설문지를 연다 -->
+<style id="err-report-css">
+.err-report{display:inline-flex;align-items:center;gap:4px;margin-top:8px;padding:4px 10px;border:1px solid rgba(120,130,150,.35);border-radius:999px;font-size:12.5px;color:inherit;opacity:.72;text-decoration:none;background:transparent}
+.err-report:hover,.err-report:focus-visible{opacity:1;border-color:currentColor}
+</style>
+<script id="err-report-js">
+(function(){
+  var FORM='https://docs.google.com/forms/d/e/1FAIpQLSfUS4AHUVOYHhzFMyNvXZCmzKt7C8z1HoPhWoIyJu_mHObnvw/viewform', E_BOOK='entry.1361642539', E_POS='entry.1943368657', E_Q='entry.923787478';
+  function txt(el){return el?String(el.innerText||el.textContent||'').replace(/\s+/g,' ').trim():'';}
+  function pos(stem){
+    var card=stem.closest('.card')||stem.parentElement, bits=[];
+    var sub=document.getElementById('subtitle'); if(sub&&txt(sub))bits.push(txt(sub));
+    var head=card&&card.querySelector('.qhead,.qno,.qnum,.qmeta'); if(head&&txt(head))bits.push(txt(head));
+    if(location.hash)bits.push(decodeURIComponent(location.hash));
+    return bits.join(' · ').slice(0,200);
+  }
+  function url(stem){
+    var u=FORM+'?usp=pp_url&'+E_BOOK+'='+encodeURIComponent(document.title)+'&'+E_POS+'='+encodeURIComponent(pos(stem))+'&'+E_Q+'='+encodeURIComponent(txt(stem).slice(0,600));
+    return u;
+  }
+  function add(){
+    var list=document.querySelectorAll('.qstem');
+    for(var i=0;i<list.length;i++){var s=list[i];if(s.getAttribute('data-er'))continue;s.setAttribute('data-er','1');
+      var a=document.createElement('a');a.className='err-report';a.target='_blank';a.rel='noopener';a.textContent='⚑ 오류 신고';
+      a.addEventListener('click',(function(st){return function(){this.href=url(st);};})(s));a.href=FORM;
+      var card=s.closest('.card'); (card||s.parentElement).appendChild(a);}
+  }
+  new MutationObserver(add).observe(document.documentElement,{childList:true,subtree:true});
+  if(document.readyState!=='loading')add();else document.addEventListener('DOMContentLoaded',add);
+})();
+</script>
+
 </body>
 </html>
